@@ -97,7 +97,12 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     // Also run the streaks cron logic for safety (some users may not have
     // any habits — their streak still needs resetting)
     for (const profile of allProfiles) {
-      await supabase.rpc('recalculate_streak', { p_user_id: profile.id }).catch(() => {});
+      try {
+        await supabase.rpc('recalculate_streak', { p_user_id: profile.id });
+      } catch {
+        // Best-effort: a single user's streak recalculation failing
+        // should not abort the rest of the rollover job.
+      }
     }
 
     return jsonOk(
