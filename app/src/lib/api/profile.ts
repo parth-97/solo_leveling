@@ -5,7 +5,6 @@ import type {
 import type {
   GetMyProfileResponse,
   UpdateMyProfileResponse,
-  GetMyStatsResponse,
   ProfileStats,
   UploadAvatarResponse,
   CompleteOnboardingInput,
