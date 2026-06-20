@@ -289,8 +289,10 @@ async function mapSourceToCategory(
     .select('id, category:categories(name)')
     .in('id', ids);
   const map = new Map<string, string>();
-  for (const row of (data ?? []) as Array<{ id: string; category: { name: string } | null }>) {
-    map.set(row.id, row.category?.name ?? 'Other');
+  for (const row of (data ?? []) as Array<{ id: string; category: { name: string } | { name: string }[] | null }>) {
+    const cat = row.category;
+    const name = Array.isArray(cat) ? (cat[0]?.name ?? 'Other') : (cat?.name ?? 'Other');
+    map.set(row.id, name);
   }
   return map;
 }
