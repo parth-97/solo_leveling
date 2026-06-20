@@ -257,10 +257,7 @@ export type GetAchievementResponse = ApiResponse<Achievement>
 export type GetTodayScoresResponse = ApiResponse<AnalyticsScores>
 
 /** GET /api/v1/analytics/scores/history?period=week|month|year */
-export interface ScoreHistoryParams {
-  period: 'week' | 'month' | 'year';
-  [key: string]: string | number | boolean | undefined | null;
-}
+export type ScoreHistoryParams = { period: 'week' | 'month' | 'year' } & Record<string, string>
 export type GetScoreHistoryResponse = ApiResponse<AnalyticsScores[]>
 
 /** GET /api/v1/analytics/radar */
