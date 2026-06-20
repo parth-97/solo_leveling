@@ -18,14 +18,14 @@ export const analyticsApi = {
 
   /** GET /api/v1/analytics/scores/history?period= */
   scoreHistory: (params: ScoreHistoryParams) =>
-    apiFetchData<GetScoreHistoryResponse['data']>('/analytics/scores/history', { params }),
+    apiFetchData<GetScoreHistoryResponse['data']>('/analytics/scores/history', { params: params as unknown as Record<string, string> }),
 
   /** GET /api/v1/analytics/radar */
   radar: () => apiFetchData<GetRadarDataResponse['data']>('/analytics/radar'),
 
   /** GET /api/v1/analytics/trends?period= */
   trends: (params: ScoreHistoryParams) =>
-    apiFetchData<GetAnalyticsTrendsResponse['data']>('/analytics/trends', { params }),
+    apiFetchData<GetAnalyticsTrendsResponse['data']>('/analytics/trends', { params: params as unknown as Record<string, string> }),
 };
 
 export const reportsApi = {
