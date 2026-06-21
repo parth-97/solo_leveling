@@ -5,10 +5,30 @@ const allowedOrigins = (process.env.ALLOWED_ORIGINS ?? 'http://localhost:5173')
   .map((o) => o.trim())
   .filter(Boolean);
 
+// ALLOWED_ORIGIN_PATTERNS supports simple "*" wildcards, e.g.
+//   https://solo-leveling-oqtw-*-parth-8256s-projects.vercel.app
+// This covers every Vercel preview/deployment URL for the same project
+// (the part between the project name and "-parth-8256s-projects.vercel.app"
+// changes on every single deploy, so an exact-match list can't keep up).
+const allowedOriginPatterns = (process.env.ALLOWED_ORIGIN_PATTERNS ?? '')
+  .split(',')
+  .map((p) => p.trim())
+  .filter(Boolean)
+  .map((pattern) => {
+    const escaped = pattern
+      .replace(/[.+?^${}()|[\]\\]/g, '\\$&') // escape regex special chars
+      .replace(/\*/g, '.*');                 // turn * into a real wildcard
+    return new RegExp(`^${escaped}$`);
+  });
+
+function isOriginAllowed(origin: string): boolean {
+  if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) return true;
+  return allowedOriginPatterns.some((re) => re.test(origin));
+}
+
 /** Returns CORS headers for the given request origin, if allowed. */
 export function corsHeaders(origin: string | null): Record<string, string> {
-  const allowOrigin =
-    origin && (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) ? origin : allowedOrigins[0] ?? '*';
+  const allowOrigin = origin && isOriginAllowed(origin) ? origin : allowedOrigins[0] ?? '*';
 
   return {
     'Access-Control-Allow-Origin': allowOrigin,
