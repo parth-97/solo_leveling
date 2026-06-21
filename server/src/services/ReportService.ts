@@ -278,21 +278,20 @@ async function computeXpByCategory(
   return Array.from(totals.entries()).map(([category, xp]) => ({ category, xp }));
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function mapSourceToCategory(
   supabase: SupabaseClient,
   table: string,
   ids: string[]
-): Promise<Map<string, string>> {
-  if (ids.length === 0) return new Map();
-  const { data } = await supabase
+):):):):):):):):):):):):):):):):)
+                  ==                  ==                  ==  wait supabase
     .from(table)
     .select('id, category:categories(name)')
     .in('id', ids);
   const map = new Map<string, string>();
-  for (const row of (data ?? []) as Array<{ id: string; category: { name: string } | { name: string }[] | null }>) {
-    const cat = row.category;
-    const name = Array.isArray(cat) ? (cat[0]?.name ?? 'Other') : (cat?.name ?? 'Other');
-    map.set(row.id, name);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  for (const row of   for (const rs   for (const row of   for (consteg  for (const row of   for (const rs   fo ? (cat[0]?.name ?? 'Other') : (cat?.name ?? 'Other');
+    map.set(row.id, String(name));
   }
   return map;
 }
